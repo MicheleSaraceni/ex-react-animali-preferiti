@@ -13,14 +13,25 @@
 
     <script type="text/babel">
         const ListaAnimali = () => {
-            const animals = ["elefante", "aquila", "delfino", "koala"];
+            const { useState } = React;
+            const animalsChoices = ["Cane", "Gatto", "Pappagallo", "Cavallo", "Panda"];
+            const [animals, setAnimals] = useState([]);
+            const addAnimal = () => {
+                const randomAnimal = animalsChoices[Math.floor(Math.random() * animalsChoices.length)]
+
+                setAnimals(prev => [...prev, randomAnimal])
+
+            }
             return (
-                <details>
-                    <summary>Animali</summary>
-                    <ul>
-                        {animals.map((animal, index) => <li key={index}>{animal}</li>)}
-                    </ul>
-                </details>
+                <>
+                    <button onClick={addAnimal}>Aggiungi animale</button>
+                    <details>
+                        <summary>Animali</summary>
+                        <ul>
+                            {animals.map((animal, index) => <li key={index}>{animal}</li>)}
+                        </ul>
+                    </details>
+                </>
             )
         }
     </script>
