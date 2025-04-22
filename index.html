@@ -12,19 +12,62 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <script type="text/babel">
+
+
+        function Modal({
+            title,
+            value,
+            onChange = () => { },
+            show = false,
+            onConfirm = () => { },
+            onClose = () => { }
+        }) {
+            return show && ReactDOM.createPortal(
+                <div className="modal-container">
+                    <div className="modal">
+                        <h2>{title}</h2>
+                        <textarea
+                            value={value}
+                            onChange={onChange}
+                            placeholder="Inserisci un animale..."
+                            rows={1}
+                            cols={50}
+                        />
+                        <br />
+                        <button onClick={onConfirm}>Aggiungi</button>
+                        <button onClick={onClose}>Annulla</button>
+                    </div>
+                </div>,
+                document.body
+            )
+        }
+
+
         const ListaAnimali = () => {
             const { useState } = React;
-            const animalsChoices = ["Cane", "Gatto", "Pappagallo", "Cavallo", "Panda"];
             const [animals, setAnimals] = useState([]);
-            const addAnimal = () => {
-                const randomAnimal = animalsChoices[Math.floor(Math.random() * animalsChoices.length)]
+            const [show, setShow] = useState(false);
+            const [testo, setTesto] = useState("");
 
-                setAnimals(prev => [...prev, randomAnimal])
-
-            }
             return (
                 <>
-                    <button onClick={addAnimal}>Aggiungi animale</button>
+                    <button onClick={() => setShow(true)}>Aggiungi animale</button>
+                    <Modal
+                        title="Scrivi un animale da aggiungere:"
+                        value={testo}
+                        show={show}
+                        onChange={(e) => setTesto(e.target.value)}
+                        onConfirm={() => {
+                            setShow(false);
+                            setAnimals(prev => [...prev, testo]);
+                            setTesto("");
+                        }}
+                        onClose={() => {
+                            setShow(false);
+                            setTesto("");
+                        }}
+                    />
+
                     <details>
                         <summary>Animali</summary>
                         <ul>
